@@ -1,16 +1,27 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { fetchCars, fetchCarById } from '../api/api';
+
+export const loadCars = createAsyncThunk(
+  'user/loadCars',
+  async () => {
+    return await fetchCars();
+  }
+);
+
+export const loadCarById = createAsyncThunk(
+  'user/loadCarById',
+  async (id) => {
+    return await fetchCarById(id);
+  }
+);
 
 const userSlice = createSlice({
   name: 'user',
   initialState: {
-    users: [
-      { id: 1, brand: 'Toyota', model: 'Camry', year: 2023, engine: '2.5L', price: '$32,000' },
-      { id: 2, brand: 'Honda', model: 'Accord', year: 2022, engine: '1.5L Turbo', price: '$37,000' },
-      { id: 3, brand: 'Nissan', model: 'Altima', year: 2023, engine: '2.0L', price: '$28,000' },
-      { id: 4, brand: 'Mazda', model: 'CX-5', year: 2023, engine: '2.5L', price: '$30,000' },
-      { id: 5, brand: 'Subaru', model: 'Outback', year: 2022, engine: '2.5L', price: '$29,500' },
-    ],
+    users: [],
     currentUser: null,
+    loading: false,
+    error: null,
   },
   reducers: {
     setCurrentUser: (state, action) => {
@@ -22,6 +33,35 @@ const userSlice = createSlice({
     removeUser: (state, action) => {
       state.users = state.users.filter(user => user.id !== action.payload);
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      // Загрузка всех автомобилей
+      .addCase(loadCars.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loadCars.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(loadCars.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      // Загрузka одного автомобиля
+      .addCase(loadCarById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loadCarById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentUser = action.payload;
+      })
+      .addCase(loadCarById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
   },
 });
 

@@ -1,0 +1,63 @@
+[
+  {
+    "id": 1,
+    "brand": "Toyota",
+    "model": "Camry",
+    "year": 2023,
+    "engine": "2.5L",
+    "price": "$32,000",
+    "description": "Надежный седан среднего класса с отличной экономичностью",
+    "color": "Серебристый",
+    "mileage": "0 км",
+    "transmission": "Автоматическая"
+  },
+  {
+    "id": 2,
+    "brand": "Honda",
+    "model": "Accord",
+    "year": 2022,
+    "engine": "1.5L Turbo",
+    "price": "$37,000",
+    "description": "Спортивный седан с мощным турбированным двигателем",
+    "color": "Черный перламутр",
+    "mileage": "5000 км",
+    "transmission": "CVT",
+    "features": ["Панорамная крыша", "Кожаный салон", "Люк"]
+  },
+  {
+    "id": 3,
+    "brand": "Nissan",
+    "model": "Altima",
+    "year": 2023,
+    "engine": "2.0L",
+    "price": "$28,000",
+    "description": "Приятный в управлении седан с просторным салоном",
+    "color": "Белый",
+    "mileage": "0 км",
+    "transmission": "Автоматическая"
+  },
+  {
+    "id": 4,
+    "brand": "Mazda",
+    "model": "CX-5",
+    "year": 2023,
+    "engine": "2.5L",
+    "price": "$30,000",
+    "description": "Современный кроссовер с стильным дизайном",
+    "color": "Красный",
+    "mileage": "1000 км",
+    "transmission": "Автоматическая"
+  },
+  {
+    "id": 5,
+    "brand": "Subaru",
+    "model": "Outback",
+    "year": 2022,
+    "engine": "2.5L",
+    "price": "$29,500",
+    "description": "Универсал повышенной проходимости для активных людей",
+    "color": "Зеленый",
+    "mileage": "8000 км",
+    "transmission": "Автоматическая"
+  }
+]

@@ -1,6 +1,7 @@
 @import './styles/variables.css';
 @import './styles/header.css';
 @import './styles/layout.css';
+@import './styles/components.css';
 
 /* Global Reset */
 * {
@@ -81,5 +82,37 @@ input, textarea, select {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-primary-dark);
+}
+
+/* Новые стили для секций */
+.main-section {
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 3px solid #e5e7eb;
+}
+
+.secondary-section {
+  margin-bottom: 40px;
+  animation: fadeIn 0.6s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-divider {
+  color: #7c3aed;
+  font-size: 24px;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #7c3aed;
+  display: inline-block;
 }
 
