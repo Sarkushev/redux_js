@@ -1,8 +1,12 @@
-import carsData from '../mock-data/cars.json';
+import carsJson from '../mock-data/cars.json';
 import articlesData from '../mock-data/articles.json';
-import productsData from '../mock-data/products.json';
-import categoriesData from '../mock-data/categories.json';
+import productsJson from '../mock-data/products.json';
+import categoriesJson from '../mock-data/categories.json';
 
+// копируем данные в изменяемые переменные для симуляции CRUD
+let carsData = Array.isArray(carsJson) ? [...carsJson] : [];
+let productsData = Array.isArray(productsJson) ? [...productsJson] : [];
+let categoriesData = Array.isArray(categoriesJson) ? [...categoriesJson] : [];
 // Функция для имитации задержки (например, сетевой запрос)
 const simulateDelay = (ms = 1500) => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -17,6 +21,32 @@ export const fetchCars = async () => {
 export const fetchCarById = async (id) => {
   await simulateDelay(1000);
   return carsData.find(car => car.id === parseInt(id));
+};
+
+// CRUD имитация для автомобилей
+export const createCar = async (car) => {
+  await simulateDelay(1200);
+  const newId = carsData.length ? Math.max(...carsData.map(c => c.id)) + 1 : 1;
+  const newCar = { ...car, id: newId };
+  // use reassignment instead of push in case original array is non-writable
+  carsData = [...carsData, newCar];
+  return newCar;
+};
+
+export const updateCar = async (id, updates) => {
+  await simulateDelay(1200);
+  const idx = carsData.findIndex(c => c.id === parseInt(id));
+  if (idx === -1) throw new Error('Car not found');
+  carsData[idx] = { ...carsData[idx], ...updates };
+  return carsData[idx];
+};
+
+export const deleteCar = async (id) => {
+  await simulateDelay(1000);
+  const idx = carsData.findIndex(c => c.id === parseInt(id));
+  if (idx === -1) throw new Error('Car not found');
+  const [removed] = carsData.splice(idx, 1);
+  return removed;
 };
 
 // API для статей

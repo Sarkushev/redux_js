@@ -1,7 +1,6 @@
 import './App.css'
 import { Header } from './components/Header'
-import { UserList } from './components/UserList'
-import { UserProfile } from './components/UserProfile'
+import { CarList } from './components/CarList'
 import { ArticleList } from './components/ArticleList'
 import { ProductList } from './components/ProductList'
 import { CategoryList } from './components/CategoryList'
@@ -17,17 +16,10 @@ function App() {
             <p className="page-subtitle">Управление данными через Redux с загрузкой из JSON</p>
           </div>
           
-          {/* Основной контент - Автомобили (LIST/DETAIL) */}
+          {/* Основной контент - Автомобили (LIST/CRUD) */}
           <div className="main-section">
             <h2 className="section-divider">📑 Главный каталог: Автомобили</h2>
-            <div className="content-grid">
-              <div>
-                <UserList />
-              </div>
-              <div>
-                <UserProfile />
-              </div>
-            </div>
+            <CarList />
           </div>
 
           {/* Секция со статьями (LIST/DETAIL функциональность) */}
