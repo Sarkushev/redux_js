@@ -4,6 +4,7 @@ import articleReducer from './articleSlice';
 import productReducer from './productSlice';
 import categoryReducer from './categorySlice';
 import carReducer from './carSlice';
+import todoReducer from './todoSlice';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     products: productReducer,
     categories: categoryReducer,
     cars: carReducer,
+    todos: todoReducer,
   },
 });
 

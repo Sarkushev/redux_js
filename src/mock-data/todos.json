@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "title": "Купить продукты",
+    "description": "Молоко, хлеб, яйца",
+    "completed": false,
+    "createdAt": "2024-01-01T10:00:00Z"
+  },
+  {
+    "id": 2,
+    "title": "Закончить проект",
+    "description": "Завершить разработку приложения",
+    "completed": false,
+    "createdAt": "2024-01-02T10:00:00Z"
+  },
+  {
+    "id": 3,
+    "title": "Позвонить другу",
+    "description": "Позвонить Ивану",
+    "completed": true,
+    "createdAt": "2024-01-03T10:00:00Z"
+  },
+  {
+    "id": 4,
+    "title": "Убраться в комнате",
+    "description": "Пропылесосить и вытереть пыль",
+    "completed": false,
+    "createdAt": "2024-01-04T10:00:00Z"
+  },
+  {
+    "id": 5,
+    "title": "Прочитать книгу",
+    "description": "Прочитать 'Война и мир'",
+    "completed": false,
+    "createdAt": "2024-01-05T10:00:00Z"
+  },
+  {
+    "id": 6,
+    "title": "Сходить в спортзал",
+    "description": "Тренировка на 1 час",
+    "completed": true,
+    "createdAt": "2024-01-06T10:00:00Z"
+  },
+  {
+    "id": 7,
+    "title": "Подготовить отчет",
+    "description": "Ежемесячный отчет по продажам",
+    "completed": false,
+    "createdAt": "2024-01-07T10:00:00Z"
+  },
+  {
+    "id": 8,
+    "title": "Посмотреть фильм",
+    "description": "Посмотреть новый фильм в кинотеатре",
+    "completed": false,
+    "createdAt": "2024-01-08T10:00:00Z"
+  },
+  {
+    "id": 9,
+    "title": "Починить велосипед",
+    "description": "Заменить цепь и подкачать шины",
+    "completed": false,
+    "createdAt": "2024-01-09T10:00:00Z"
+  },
+  {
+    "id": 10,
+    "title": "Организовать вечеринку",
+    "description": "Пригласить друзей на день рождения",
+    "completed": false,
+    "createdAt": "2024-01-10T10:00:00Z"
+  }
+]

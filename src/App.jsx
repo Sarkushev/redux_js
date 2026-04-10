@@ -4,6 +4,7 @@ import { CarList } from './components/CarList'
 import { ArticleList } from './components/ArticleList'
 import { ProductList } from './components/ProductList'
 import { CategoryList } from './components/CategoryList'
+import { TodoList } from './components/TodoList'
 
 function App() {
   return (
@@ -35,6 +36,11 @@ function App() {
           {/* Секция с категориями */}
           <div className="secondary-section">
             <CategoryList />
+          </div>
+
+          {/* Секция с задачами (Todo) */}
+          <div className="secondary-section">
+            <TodoList />
           </div>
         </div>
       </div>

@@ -2,11 +2,13 @@ import carsJson from '../mock-data/cars.json';
 import articlesData from '../mock-data/articles.json';
 import productsJson from '../mock-data/products.json';
 import categoriesJson from '../mock-data/categories.json';
+import todosJson from '../mock-data/todos.json';
 
 // копируем данные в изменяемые переменные для симуляции CRUD
 let carsData = Array.isArray(carsJson) ? [...carsJson] : [];
 let productsData = Array.isArray(productsJson) ? [...productsJson] : [];
 let categoriesData = Array.isArray(categoriesJson) ? [...categoriesJson] : [];
+let todosData = Array.isArray(todosJson) ? [...todosJson] : [];
 // Функция для имитации задержки (например, сетевой запрос)
 const simulateDelay = (ms = 1500) => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -80,4 +82,40 @@ export const fetchCategories = async () => {
 export const fetchCategoryById = async (id) => {
   await simulateDelay(800);
   return categoriesData.find(category => category.id === parseInt(id));
+};
+
+// API для todos
+export const fetchTodos = async () => {
+  await simulateDelay(1500);
+  return todosData;
+};
+
+export const fetchTodoById = async (id) => {
+  await simulateDelay(1000);
+  return todosData.find(todo => todo.id === parseInt(id));
+};
+
+// CRUD имитация для todos
+export const createTodo = async (todo) => {
+  await simulateDelay(1200);
+  const newId = todosData.length ? Math.max(...todosData.map(t => t.id)) + 1 : 1;
+  const newTodo = { ...todo, id: newId, createdAt: new Date().toISOString() };
+  todosData = [...todosData, newTodo];
+  return newTodo;
+};
+
+export const updateTodo = async (id, updates) => {
+  await simulateDelay(1200);
+  const idx = todosData.findIndex(t => t.id === parseInt(id));
+  if (idx === -1) throw new Error('Todo not found');
+  todosData[idx] = { ...todosData[idx], ...updates };
+  return todosData[idx];
+};
+
+export const deleteTodo = async (id) => {
+  await simulateDelay(1000);
+  const idx = todosData.findIndex(t => t.id === parseInt(id));
+  if (idx === -1) throw new Error('Todo not found');
+  const [removed] = todosData.splice(idx, 1);
+  return removed;
 };
