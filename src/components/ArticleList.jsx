@@ -1,12 +1,25 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadArticles } from '../store/articleSlice';
+import { loadArticles, toggleLike, toggleFavorite } from '../store/articleSlice';
+import { selectIsLiked, selectIsFavorited } from '../store/selectors';
 import '../styles/components.css';
 
 export function ArticleList() {
   const dispatch = useDispatch();
   const { list: articles, loading, error } = useSelector((state) => state.articles);
   const [selectedId, setSelectedId] = useState(null);
+
+  const userId = 1; // Предполагаем, что пользователь с id 1
+
+  const handleToggleLike = (id, e) => {
+    e.stopPropagation();
+    dispatch(toggleLike({ id, userId }));
+  };
+
+  const handleToggleFavorite = (id, e) => {
+    e.stopPropagation();
+    dispatch(toggleFavorite({ id, userId }));
+  };
 
   useEffect(() => {
     dispatch(loadArticles());
@@ -43,6 +56,20 @@ export function ArticleList() {
             <span className="date">📅 {selected.date}</span>
             <span className="category">🏷️ {selected.category}</span>
           </div>
+          <div className="article-actions">
+            <button 
+              onClick={(e) => handleToggleLike(selected.id, e)}
+              className={`action-btn ${selectIsLiked(selected, userId) ? 'liked' : ''}`}
+            >
+              👍 {selected.likes.length}
+            </button>
+            <button 
+              onClick={(e) => handleToggleFavorite(selected.id, e)}
+              className={`action-btn ${selectIsFavorited(selected, userId) ? 'favorited' : ''}`}
+            >
+              ⭐ {selected.favorites.length}
+            </button>
+          </div>
           <div className="article-image">{selected.image}</div>
           <p className="article-content">{selected.content}</p>
           <p className="article-excerpt">Исходное описание: {selected.excerpt}</p>
@@ -65,6 +92,20 @@ export function ArticleList() {
             <div className="article-icon">{article.image}</div>
             <h3 className="article-card-title">{article.title}</h3>
             <p className="article-excerpt">{article.excerpt}</p>
+            <div className="article-actions">
+              <button 
+                onClick={(e) => handleToggleLike(article.id, e)}
+                className={`action-btn ${selectIsLiked(article, userId) ? 'liked' : ''}`}
+              >
+                👍 {article.likes.length}
+              </button>
+              <button 
+                onClick={(e) => handleToggleFavorite(article.id, e)}
+                className={`action-btn ${selectIsFavorited(article, userId) ? 'favorited' : ''}`}
+              >
+                ⭐ {article.favorites.length}
+              </button>
+            </div>
             <div className="article-footer">
               <span className="article-author">{article.author}</span>
               <span className="article-date">{article.date}</span>

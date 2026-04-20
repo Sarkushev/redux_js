@@ -1,14 +1,16 @@
 import carsJson from '../mock-data/cars.json';
-import articlesData from '../mock-data/articles.json';
+import articlesJson from '../mock-data/articles.json';
 import productsJson from '../mock-data/products.json';
 import categoriesJson from '../mock-data/categories.json';
 import todosJson from '../mock-data/todos.json';
 
 // копируем данные в изменяемые переменные для симуляции CRUD
-let carsData = Array.isArray(carsJson) ? [...carsJson] : [];
-let productsData = Array.isArray(productsJson) ? [...productsJson] : [];
-let categoriesData = Array.isArray(categoriesJson) ? [...categoriesJson] : [];
-let todosData = Array.isArray(todosJson) ? [...todosJson] : [];
+// используем JSON.parse(JSON.stringify()) для глубокого копирования (deep clone)
+let carsData = JSON.parse(JSON.stringify(Array.isArray(carsJson) ? carsJson : []));
+let articlesData = JSON.parse(JSON.stringify(Array.isArray(articlesJson) ? articlesJson : []));
+let productsData = JSON.parse(JSON.stringify(Array.isArray(productsJson) ? productsJson : []));
+let categoriesData = JSON.parse(JSON.stringify(Array.isArray(categoriesJson) ? categoriesJson : []));
+let todosData = JSON.parse(JSON.stringify(Array.isArray(todosJson) ? todosJson : []));
 // Функция для имитации задержки (например, сетевой запрос)
 const simulateDelay = (ms = 1500) => {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -39,15 +41,17 @@ export const updateCar = async (id, updates) => {
   await simulateDelay(1200);
   const idx = carsData.findIndex(c => c.id === parseInt(id));
   if (idx === -1) throw new Error('Car not found');
-  carsData[idx] = { ...carsData[idx], ...updates };
-  return carsData[idx];
+  const updatedCar = { ...carsData[idx], ...updates };
+  carsData = [...carsData.slice(0, idx), updatedCar, ...carsData.slice(idx + 1)];
+  return updatedCar;
 };
 
 export const deleteCar = async (id) => {
   await simulateDelay(1000);
   const idx = carsData.findIndex(c => c.id === parseInt(id));
   if (idx === -1) throw new Error('Car not found');
-  const [removed] = carsData.splice(idx, 1);
+  const removed = carsData[idx];
+  carsData = [...carsData.slice(0, idx), ...carsData.slice(idx + 1)];
   return removed;
 };
 
@@ -108,14 +112,16 @@ export const updateTodo = async (id, updates) => {
   await simulateDelay(1200);
   const idx = todosData.findIndex(t => t.id === parseInt(id));
   if (idx === -1) throw new Error('Todo not found');
-  todosData[idx] = { ...todosData[idx], ...updates };
-  return todosData[idx];
+  const updatedTodo = { ...todosData[idx], ...updates };
+  todosData = [...todosData.slice(0, idx), updatedTodo, ...todosData.slice(idx + 1)];
+  return updatedTodo;
 };
 
 export const deleteTodo = async (id) => {
   await simulateDelay(1000);
   const idx = todosData.findIndex(t => t.id === parseInt(id));
   if (idx === -1) throw new Error('Todo not found');
-  const [removed] = todosData.splice(idx, 1);
+  const removed = todosData[idx];
+  todosData = [...todosData.slice(0, idx), ...todosData.slice(idx + 1)];
   return removed;
 };

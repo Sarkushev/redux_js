@@ -33,6 +33,44 @@ const carSlice = createSlice({
     clearSelectedCar: (state) => {
       state.selectedCar = null;
     },
+    toggleLike: (state, action) => {
+      const { id, userId } = action.payload;
+      const car = state.list.find(c => c.id === id);
+      if (car) {
+        if (car.likes.includes(userId)) {
+          car.likes = car.likes.filter(uid => uid !== userId);
+        } else {
+          car.likes.push(userId);
+        }
+      }
+      if (state.selectedCar && state.selectedCar.id === id) {
+        state.selectedCar.likes = car.likes;
+      }
+    },
+    toggleFavorite: (state, action) => {
+      const { id, userId } = action.payload;
+      const car = state.list.find(c => c.id === id);
+      if (car) {
+        if (car.favorites.includes(userId)) {
+          car.favorites = car.favorites.filter(uid => uid !== userId);
+        } else {
+          car.favorites.push(userId);
+        }
+      }
+      if (state.selectedCar && state.selectedCar.id === id) {
+        state.selectedCar.favorites = car.favorites;
+      }
+    },
+    addRating: (state, action) => {
+      const { id, userId, rating } = action.payload;
+      const car = state.list.find(c => c.id === id);
+      if (car) {
+        car.ratings = { ...car.ratings, [userId]: rating };
+      }
+      if (state.selectedCar && state.selectedCar.id === id) {
+        state.selectedCar.ratings = car.ratings;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -108,5 +146,5 @@ const carSlice = createSlice({
   },
 });
 
-export const { clearSelectedCar } = carSlice.actions;
+export const { clearSelectedCar, toggleLike, toggleFavorite, addRating } = carSlice.actions;
 export default carSlice.reducer;

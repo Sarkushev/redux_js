@@ -1,11 +1,24 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadProducts } from '../store/productSlice';
+import { loadProducts, toggleLike, toggleFavorite } from '../store/productSlice';
+import { selectIsLiked, selectIsFavorited } from '../store/selectors';
 import '../styles/components.css';
 
 export function ProductList() {
   const dispatch = useDispatch();
   const { list: products, loading, error } = useSelector((state) => state.products);
+
+  const userId = 1;
+
+  const handleToggleLike = (id, e) => {
+    e.stopPropagation();
+    dispatch(toggleLike({ id, userId }));
+  };
+
+  const handleToggleFavorite = (id, e) => {
+    e.stopPropagation();
+    dispatch(toggleFavorite({ id, userId }));
+  };
 
   useEffect(() => {
     dispatch(loadProducts());
@@ -37,7 +50,20 @@ export function ProductList() {
               <span className="category">{product.category}</span>
               <span className="in-stock">На складе: {product.stock}</span>
             </div>
-            <div className="product-rating">⭐ {product.rating}</div>
+            <div className="article-actions">
+              <button 
+                onClick={(e) => handleToggleLike(product.id, e)}
+                className={`action-btn ${selectIsLiked(product, userId) ? 'liked' : ''}`}
+              >
+                👍 {product.likes.length}
+              </button>
+              <button 
+                onClick={(e) => handleToggleFavorite(product.id, e)}
+                className={`action-btn ${selectIsFavorited(product, userId) ? 'favorited' : ''}`}
+              >
+                ⭐ {product.favorites.length}
+              </button>
+            </div>
             <div className="product-price">${product.price}</div>
           </div>
         ))}

@@ -27,6 +27,44 @@ const articleSlice = createSlice({
     clearSelectedArticle: (state) => {
       state.selectedArticle = null;
     },
+    toggleLike: (state, action) => {
+      const { id, userId } = action.payload;
+      const article = state.list.find(a => a.id === id);
+      if (article) {
+        if (article.likes.includes(userId)) {
+          article.likes = article.likes.filter(uid => uid !== userId);
+        } else {
+          article.likes.push(userId);
+        }
+      }
+      if (state.selectedArticle && state.selectedArticle.id === id) {
+        state.selectedArticle.likes = article.likes;
+      }
+    },
+    toggleFavorite: (state, action) => {
+      const { id, userId } = action.payload;
+      const article = state.list.find(a => a.id === id);
+      if (article) {
+        if (article.favorites.includes(userId)) {
+          article.favorites = article.favorites.filter(uid => uid !== userId);
+        } else {
+          article.favorites.push(userId);
+        }
+      }
+      if (state.selectedArticle && state.selectedArticle.id === id) {
+        state.selectedArticle.favorites = article.favorites;
+      }
+    },
+    addRating: (state, action) => {
+      const { id, userId, rating } = action.payload;
+      const article = state.list.find(a => a.id === id);
+      if (article) {
+        article.ratings = { ...article.ratings, [userId]: rating };
+      }
+      if (state.selectedArticle && state.selectedArticle.id === id) {
+        state.selectedArticle.ratings = article.ratings;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -59,5 +97,5 @@ const articleSlice = createSlice({
   },
 });
 
-export const { clearSelectedArticle } = articleSlice.actions;
+export const { clearSelectedArticle, toggleLike, toggleFavorite, addRating } = articleSlice.actions;
 export default articleSlice.reducer;
