@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchProducts, fetchProductById } from '../api/api';
+import { fetchProducts, fetchProductById } from '../../api/api';
 
 export const loadProducts = createAsyncThunk(
   'products/loadProducts',

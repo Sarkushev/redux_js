@@ -7,7 +7,7 @@ import {
   removeTodo,
   loadTodoById,
   clearSelectedTodo,
-} from '../store/todoSlice';
+} from '../redux/slices/todoSlice';
 import { TodoForm } from './TodoForm';
 import '../styles/components.css';
 
@@ -30,7 +30,8 @@ export function TodoList() {
     setShowForm(true);
   };
 
-  const openEditForm = (todo) => {
+  const openEditForm = (event, todo) => {
+    event?.preventDefault();
     setFormMode('edit');
     setCurrentTodo(todo);
     setShowForm(true);
@@ -44,8 +45,21 @@ export function TodoList() {
   const handleSubmit = (data) => {
     if (formMode === 'add') {
       dispatch(addTodo(data));
-    } else if (formMode === 'edit' && currentTodo) {
-      dispatch(editTodo({ id: currentTodo.id, updates: data }));
+      closeForm();
+      return;
+    }
+
+    if (formMode === 'edit' && currentTodo) {
+      dispatch(editTodo({ id: currentTodo.id, updates: data }))
+        .unwrap()
+        .then((updatedTodo) => {
+          if (showDetail && selectedTodo?.id === updatedTodo.id) {
+            dispatch(loadTodoById(updatedTodo.id));
+          }
+        })
+        .catch(() => {
+          // ignore
+        });
     }
     closeForm();
   };
@@ -56,7 +70,8 @@ export function TodoList() {
     }
   };
 
-  const handleViewDetail = (id) => {
+  const handleViewDetail = (event, id) => {
+    event?.preventDefault();
     dispatch(loadTodoById(id));
     setShowDetail(true);
   };
@@ -82,41 +97,52 @@ export function TodoList() {
   return (
     <div className="todos-wrapper">
       <h2 className="section-title">📝 Задачи (Todo)</h2>
-      <button onClick={openAddForm} className="add-button">
+      <button type="button" onClick={openAddForm} className="add-button">
         ➕ Добавить задачу
       </button>
       {showForm && (
-        <TodoForm
-          initialData={currentTodo || {}}
-          onSubmit={handleSubmit}
-          onCancel={closeForm}
-        />
+        <div className="detail-modal">
+          <div className="detail-content">
+            <h3>{formMode === 'add' ? 'Новая задача' : 'Редактировать задачу'}</h3>
+            <TodoForm
+              initialData={currentTodo || {}}
+              onSubmit={handleSubmit}
+              onCancel={closeForm}
+            />
+          </div>
+        </div>
       )}
       {showDetail && selectedTodo && (
         <div className="detail-modal">
           <div className="detail-content">
             <h3>{selectedTodo.title}</h3>
-            <p><strong>Описание:</strong> {selectedTodo.description}</p>
+            <p><strong>Описание:</strong> {selectedTodo.description || 'Описание отсутствует'}</p>
             <p><strong>Статус:</strong> {selectedTodo.completed ? 'Выполнено' : 'Не выполнено'}</p>
-            <p><strong>Создано:</strong> {new Date(selectedTodo.createdAt).toLocaleString()}</p>
+            <p><strong>Создано:</strong> {new Date(selectedTodo.createdAt || Date.now()).toLocaleString()}</p>
             <button onClick={closeDetail} className="close-button">Закрыть</button>
           </div>
         </div>
       )}
-      <div className="todos-grid">
-        {todos.map((todo) => (
-          <div key={todo.id} className={`todo-card ${todo.completed ? 'completed' : ''}`}>
-            <h3>{todo.title}</h3>
-            <p>{todo.description}</p>
-            <p>Статус: {todo.completed ? '✅ Выполнено' : '⏳ В процессе'}</p>
-            <div className="card-actions">
-              <button onClick={() => handleViewDetail(todo.id)}>Подробнее</button>
-              <button onClick={() => openEditForm(todo)}>Редактировать</button>
-              <button onClick={() => handleDelete(todo.id)}>Удалить</button>
+      {todos.length === 0 ? (
+        <div className="empty-state">
+          Список задач пуст. Добавьте новую задачу, чтобы начать.
+        </div>
+      ) : (
+        <div className="todos-grid">
+          {todos.map((todo) => (
+            <div key={todo.id} className={`todo-card ${todo.completed ? 'completed' : ''}`}>
+              <h3>{todo.title}</h3>
+              <p>{todo.description || 'Описание отсутствует'}</p>
+              <p>Статус: {todo.completed ? '✅ Выполнено' : '⏳ В процессе'}</p>
+              <div className="card-actions">
+                <button type="button" onClick={(e) => handleViewDetail(e, todo.id)}>Подробнее</button>
+                <button type="button" onClick={(e) => openEditForm(e, todo)}>Редактировать</button>
+                <button type="button" onClick={() => handleDelete(todo.id)}>Удалить</button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

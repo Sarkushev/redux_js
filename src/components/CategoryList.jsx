@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadCategories } from '../store/categorySlice';
+import { loadCategories } from '../redux/slices/categorySlice';
 import '../styles/components.css';
 
 export function CategoryList() {

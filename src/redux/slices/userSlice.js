@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchCars, fetchCarById } from '../api/api';
+import { fetchCars, fetchCarById } from '../../api/api';
 
 export const loadCars = createAsyncThunk(
   'user/loadCars',

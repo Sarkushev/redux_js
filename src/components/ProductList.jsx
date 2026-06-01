@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadProducts, toggleLike, toggleFavorite } from '../store/productSlice';
-import { selectIsLiked, selectIsFavorited } from '../store/selectors';
+import { loadProducts, toggleLike, toggleFavorite } from '../redux/slices/productSlice';
+import { selectIsLiked, selectIsFavorited } from '../redux/selectors';
 import '../styles/components.css';
 
 export function ProductList() {

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCurrentUser, loadCars } from '../store/userSlice';
+import { setCurrentUser, loadCars } from '../redux/slices/userSlice';
 
 export function UserList() {
   const dispatch = useDispatch();

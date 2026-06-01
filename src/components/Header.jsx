@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
+import { NavLink } from 'react-router-dom'
 import '../styles/header.css'
 
 export function Header() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Проверяем сохраненную тему или предпочтение системы
     const saved = localStorage.getItem('theme')
     if (saved) {
       return saved === 'dark'
@@ -11,8 +11,9 @@ export function Header() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches
   })
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
   useEffect(() => {
-    // Применяем тему при изменении состояния
     if (isDarkMode) {
       document.documentElement.classList.add('dark-mode')
       localStorage.setItem('theme', 'dark')
@@ -26,6 +27,10 @@ export function Header() {
     setIsDarkMode(!isDarkMode)
   }
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
   return (
     <header className="header">
       <div className="header-container">
@@ -36,19 +41,34 @@ export function Header() {
         <nav className="nav-menu">
           <ul className="nav-list">
             <li className="nav-item">
-              <a href="#home" className="nav-link active">Главная</a>
+              <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+                Главная
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a href="#users" className="nav-link">Пользователи</a>
+              <NavLink to="/cars" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+                Авто
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a href="#profile" className="nav-link">Профиль</a>
+              <NavLink to="/products" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+                Товары
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a href="#settings" className="nav-link">Настройки</a>
+              <NavLink to="/todos" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+                Задачи
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a href="#about" className="nav-link">О проекте</a>
+              <NavLink to="/articles" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+                Статьи
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/about" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+                О проекте
+              </NavLink>
             </li>
           </ul>
         </nav>
@@ -62,8 +82,77 @@ export function Header() {
           >
             {isDarkMode ? '☀️' : '🌙'}
           </button>
+          <button 
+            className="hamburger-btn"
+            onClick={toggleMobileMenu}
+            title="Меню"
+            aria-label="Открыть меню"
+          >
+            ☰
+          </button>
         </div>
       </div>
+
+      {isMobileMenuOpen && (
+        <nav className="mobile-menu open">
+          <ul className="nav-list">
+            <li className="nav-item">
+              <NavLink 
+                to="/" 
+                className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Главная
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink 
+                to="/cars" 
+                className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Авто
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink 
+                to="/products" 
+                className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Товары
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink 
+                to="/todos" 
+                className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Задачи
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink 
+                to="/articles" 
+                className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Статьи
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink 
+                to="/about" 
+                className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                О проекте
+              </NavLink>
+            </li>
+          </ul>
+        </nav>
+      )}
     </header>
   )
 }

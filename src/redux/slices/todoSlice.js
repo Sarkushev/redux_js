@@ -1,20 +1,40 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchTodos, fetchTodoById, createTodo as apiCreateTodo, updateTodo as apiUpdateTodo, deleteTodo as apiDeleteTodo } from '../api/api';
+import { fetchTodos, fetchTodoById, createTodo as apiCreateTodo, updateTodo as apiUpdateTodo, deleteTodo as apiDeleteTodo } from '../../services/todoApi';
 
 export const loadTodos = createAsyncThunk('todos/loadTodos', async () => {
-  return await fetchTodos();
+  const todos = await fetchTodos();
+  return todos.map(todo => ({
+    ...todo,
+    description: todo.description ?? todo.title,
+    createdAt: todo.createdAt ?? new Date().toISOString(),
+  }));
 });
 
 export const loadTodoById = createAsyncThunk('todos/loadTodoById', async (id) => {
-  return await fetchTodoById(id);
+  const todo = await fetchTodoById(id);
+  return {
+    ...todo,
+    description: todo.description ?? todo.title,
+    createdAt: todo.createdAt ?? new Date().toISOString(),
+  };
 });
 
 export const addTodo = createAsyncThunk('todos/addTodo', async (todo) => {
-  return await apiCreateTodo(todo);
+  const response = await apiCreateTodo(todo);
+  return {
+    ...response,
+    description: todo.description || todo.title,
+    createdAt: todo.createdAt || new Date().toISOString(),
+  };
 });
 
 export const editTodo = createAsyncThunk('todos/editTodo', async ({ id, updates }) => {
-  return await apiUpdateTodo(id, updates);
+  const response = await apiUpdateTodo(id, updates);
+  return {
+    ...response,
+    description: updates.description || response.description || response.title,
+    createdAt: updates.createdAt || response.createdAt || new Date().toISOString(),
+  };
 });
 
 export const removeTodo = createAsyncThunk('todos/removeTodo', async (id) => {

@@ -3,103 +3,19 @@
 @import './styles/layout.css';
 @import './styles/components.css';
 
-/* Global Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: var(--font-family);
-  background-color: var(--color-light-bg);
-  color: var(--color-dark);
-  line-height: 1.6;
-}
-
+/* Main App Container */
 #root {
-  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
 }
 
-/* Links */
-a {
-  color: inherit;
-  text-decoration: none;
-  transition: color var(--transition-base);
-}
-
-a:hover {
-  color: var(--color-primary);
-}
-
-/* Buttons */
-button {
-  font-family: var(--font-family);
-}
-
-/* Headings */
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: var(--spacing-md);
-}
-
-h1 {
-  font-size: 2.5rem;
-}
-
-h2 {
-  font-size: 2rem;
-}
-
-h3 {
-  font-size: 1.5rem;
-}
-
-/* Forms */
-input, textarea, select {
-  font-family: var(--font-family);
-}
-
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-light-gray);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-primary-dark);
-}
-
-/* Новые стили для секций */
-.main-section {
-  margin-bottom: 40px;
-  padding-bottom: 40px;
-  border-bottom: 3px solid #e5e7eb;
-}
-
-.secondary-section {
-  margin-bottom: 40px;
-  animation: fadeIn 0.6s ease-in;
-}
-
+/* Fade In Animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -107,12 +23,7 @@ input, textarea, select {
   }
 }
 
-.section-divider {
-  color: #7c3aed;
-  font-size: 24px;
-  margin-bottom: 25px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid #7c3aed;
-  display: inline-block;
+.main-section,
+.secondary-section {
+  animation: fadeIn 0.3s ease-in;
 }
-
