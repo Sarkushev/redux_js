@@ -1,5 +1,18 @@
+/**
+ * carSlice.js - Redux слайс для управления автомобилями
+ * 
+ * Отвечает за:
+ * - CRUD операции (создание, чтение, обновление, удаление) автомобилей
+ * - Управление лайками и избранным
+ * - Рейтинги автомобилей
+ * - Состояния загрузки и ошибки
+ */
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchCars, fetchCarById, createCar as apiCreateCar, updateCar as apiUpdateCar, deleteCar as apiDeleteCar } from '../../api/api';
+
+// === АСИНХРОННЫЕ ДЕЙСТВИЯ (Thunks) ===
+// Каждый вызывает API функцию из api/api.js
 
 export const loadCars = createAsyncThunk('cars/loadCars', async () => {
   return await fetchCars();
@@ -21,14 +34,17 @@ export const removeCar = createAsyncThunk('cars/removeCar', async (id) => {
   return await apiDeleteCar(id);
 });
 
+// === REDUX СЛАЙС ===
+// Содержит состояние и редьюсеры (синхронные и асинхронные)
 const carSlice = createSlice({
   name: 'cars',
   initialState: {
-    list: [],
-    selectedCar: null,
-    loading: false,
-    error: null,
+    list: [],              // Все автомобили
+    selectedCar: null,     // Выбранный для просмотра
+    loading: false,        // Статус загрузки
+    error: null,           // Ошибка
   },
+  // === СИНХРОННЫЕ РЕДЬЮСЕРЫ ===
   reducers: {
     clearSelectedCar: (state) => {
       state.selectedCar = null;
@@ -72,6 +88,8 @@ const carSlice = createSlice({
       }
     },
   },
+  // === АСИНХРОННЫЕ РЕДЬЮСЕРЫ ===
+  // Обрабатывают состояния thunks: pending, fulfilled, rejected
   extraReducers: (builder) => {
     builder
       .addCase(loadCars.pending, (state) => {

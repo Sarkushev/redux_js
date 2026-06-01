@@ -1,6 +1,32 @@
+/**
+ * todoSlice.js - Redux слайс для управления задачами (TODO)
+ * 
+ * Отвечает за:
+ * - CRUD операции (создание, чтение, обновление, удаление) задач
+ * - Загрузку задач из REST API (JSONPlaceholder)
+ * - Выбранную задачу для просмотра
+ * - Состояния загрузки и ошибки
+ * - Трансформацию данных (добавление description и createdAt)
+ * 
+ * Основные действия (thunks):
+ * - loadTodos: загрузить все задачи из API
+ * - addTodo: создать новую задачу
+ * - editTodo: обновить задачу
+ * - removeTodo: удалить задачу
+ * - loadTodoById: загрузить одну задачу по ID
+ */
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchTodos, fetchTodoById, createTodo as apiCreateTodo, updateTodo as apiUpdateTodo, deleteTodo as apiDeleteTodo } from '../../services/todoApi';
 
+/**
+ * === АСИНХРОННЫЕ ДЕЙСТВИЯ (Thunks) ===
+ * Каждый вызывает REST API функцию из services/todoApi.js
+ * и трансформирует данные перед сохранением в Redux
+ */
+
+// Загрузить все задачи
+// Добавляет поля description и createdAt если их нет
 export const loadTodos = createAsyncThunk('todos/loadTodos', async () => {
   const todos = await fetchTodos();
   return todos.map(todo => ({
@@ -10,6 +36,7 @@ export const loadTodos = createAsyncThunk('todos/loadTodos', async () => {
   }));
 });
 
+// Загрузить одну задачу по ID
 export const loadTodoById = createAsyncThunk('todos/loadTodoById', async (id) => {
   const todo = await fetchTodoById(id);
   return {
@@ -19,6 +46,7 @@ export const loadTodoById = createAsyncThunk('todos/loadTodoById', async (id) =>
   };
 });
 
+// Добавить новую задачу
 export const addTodo = createAsyncThunk('todos/addTodo', async (todo) => {
   const response = await apiCreateTodo(todo);
   return {
@@ -28,6 +56,7 @@ export const addTodo = createAsyncThunk('todos/addTodo', async (todo) => {
   };
 });
 
+// Обновить задачу
 export const editTodo = createAsyncThunk('todos/editTodo', async ({ id, updates }) => {
   const response = await apiUpdateTodo(id, updates);
   return {
@@ -37,25 +66,36 @@ export const editTodo = createAsyncThunk('todos/editTodo', async ({ id, updates 
   };
 });
 
+// Удалить задачу
 export const removeTodo = createAsyncThunk('todos/removeTodo', async (id) => {
   return await apiDeleteTodo(id);
 });
 
+/**
+ * === REDUX СЛАЙС ===
+ * Содержит состояние и редьюсеры для задач
+ */
 const todoSlice = createSlice({
   name: 'todos',
+  // Начальное состояние
   initialState: {
-    list: [],
-    selectedTodo: null,
-    loading: false,
-    error: null,
+    list: [],              // Массив всех задач
+    selectedTodo: null,    // Выбранная задача для просмотра
+    loading: false,        // Флаг загрузки
+    error: null,           // Сообщение об ошибке
   },
+  // === СИНХРОННЫЕ РЕДЬЮСЕРЫ ===
   reducers: {
+    // Очистить выбранную задачу
     clearSelectedTodo: (state) => {
       state.selectedTodo = null;
     },
   },
+  // === АСИНХРОННЫЕ РЕДЬЮСЕРЫ ===
+  // Обрабатывают состояния thunks: pending, fulfilled, rejected
   extraReducers: (builder) => {
     builder
+      // Обработка loadTodos
       .addCase(loadTodos.pending, (state) => {
         state.loading = true;
         state.error = null;

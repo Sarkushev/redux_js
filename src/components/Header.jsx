@@ -1,3 +1,13 @@
+/**
+ * Header.jsx - Навигационная панель приложения
+ * 
+ * Отвечает за:
+ * - Отображение логотипа
+ * - Навигацию по главным страницам
+ * - Переключение тёмной/светлой темы
+ * - Мобильное меню (бургер)
+ */
+
 import { useState, useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 import '../styles/header.css'
