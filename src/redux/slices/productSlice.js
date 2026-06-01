@@ -1,6 +1,18 @@
+/**
+ * productSlice.js - Redux слайс для управления товарами
+ *
+ * Хранит список товаров, выбранный товар и состояния загрузки/ошибки.
+ * Реализует лайки, избранное и рейтинги (синхронно).
+ *
+ * Асинхронные действия (thunks): loadProducts, loadProductById
+ * Синхронные действия: clearSelectedProduct, toggleLike, toggleFavorite, addRating
+ */
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchProducts, fetchProductById } from '../../api/api';
 
+// === АСИНХРОННЫЕ ДЕЙСТВИЯ (Thunks) ===
+// Загружают товары из api/api.js (pending/fulfilled/rejected генерируются автоматически)
 export const loadProducts = createAsyncThunk(
   'products/loadProducts',
   async () => {
@@ -17,12 +29,14 @@ export const loadProductById = createAsyncThunk(
 
 const productSlice = createSlice({
   name: 'products',
+  // Начальное состояние
   initialState: {
-    list: [],
-    selectedProduct: null,
-    loading: false,
-    error: null,
+    list: [],               // все товары
+    selectedProduct: null,  // выбранный товар
+    loading: false,         // флаг загрузки
+    error: null,            // ошибка
   },
+  // === СИНХРОННЫЕ РЕДЬЮСЕРЫ (лайки, избранное, рейтинг) ===
   reducers: {
     clearSelectedProduct: (state) => {
       state.selectedProduct = null;
@@ -66,6 +80,8 @@ const productSlice = createSlice({
       }
     },
   },
+  // === АСИНХРОННЫЕ РЕДЬЮСЕРЫ ===
+  // Реагируют на 3 фазы каждого thunk и обновляют состояние
   extraReducers: (builder) => {
     builder
       .addCase(loadProducts.pending, (state) => {

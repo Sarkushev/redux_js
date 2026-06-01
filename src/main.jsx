@@ -22,7 +22,7 @@ import App from './App.jsx'
  * - StrictMode помогает выявить проблемы в разработке
  * - Provider делает Redux хранилище доступным для всех компонентов
  */
-creatRoot(document.getElementById('root')).render(
+createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
       <App />

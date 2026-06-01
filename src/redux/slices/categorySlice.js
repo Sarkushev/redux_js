@@ -1,6 +1,18 @@
+/**
+ * categorySlice.js - Redux слайс для категорий товаров
+ *
+ * Самый простой слайс в проекте: только загрузка списка категорий.
+ * Здесь НЕТ синхронных reducers — только один thunk и его extraReducers.
+ * Удобный пример «минимального» слайса для объяснения архитектуры.
+ *
+ * Асинхронное действие (thunk): loadCategories
+ */
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchCategories } from '../../api/api';
 
+// === АСИНХРОННОЕ ДЕЙСТВИЕ (Thunk) ===
+// Загружает категории из api/api.js
 export const loadCategories = createAsyncThunk(
   'categories/loadCategories',
   async () => {
@@ -10,11 +22,14 @@ export const loadCategories = createAsyncThunk(
 
 const categorySlice = createSlice({
   name: 'categories',
+  // Начальное состояние
   initialState: {
-    list: [],
-    loading: false,
-    error: null,
+    list: [],        // список категорий
+    loading: false,  // флаг загрузки
+    error: null,     // ошибка
   },
+  // === АСИНХРОННЫЕ РЕДЬЮСЕРЫ ===
+  // Обрабатывают 3 фазы загрузки: pending / fulfilled / rejected
   extraReducers: (builder) => {
     builder
       .addCase(loadCategories.pending, (state) => {

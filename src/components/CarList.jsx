@@ -1,20 +1,37 @@
+/**
+ * CarList.jsx - Компонент списка автомобилей
+ *
+ * Демонстрирует ВСЕ способы связи компонента с Redux:
+ * - чтение состояния через useSelector
+ * - АСИНХРОННЫЕ действия (thunks): loadCars, addCar, editCar, removeCar
+ * - СИНХРОННЫЕ действия: toggleLike, toggleFavorite, addRating
+ * - селекторы из redux/selectors.js для вычисления оценки/лайков
+ *
+ * Локальное состояние (useState) — только для UI (формы, поиск),
+ * а данные автомобилей живут в Redux-сторе.
+ */
+
 import { useEffect, useState } from 'react';
+// useDispatch — чтобы отправлять действия в стор; useSelector — чтобы читать из стора
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  loadCars,
-  addCar,
-  editCar,
-  removeCar,
-  toggleLike,
-  toggleFavorite,
-  addRating,
+  loadCars,      // thunk: загрузить список (async)
+  addCar,        // thunk: добавить (async)
+  editCar,       // thunk: изменить (async)
+  removeCar,     // thunk: удалить (async)
+  toggleLike,    // sync: лайк
+  toggleFavorite,// sync: избранное
+  addRating,     // sync: оценка
 } from '../redux/slices/carSlice';
 import { selectAverageRating, selectIsLiked, selectIsFavorited } from '../redux/selectors';
 import { CarForm } from './CarForm';
 import '../styles/components.css';
 
 export function CarList({ previewCount, hideControls = false }) {
+  // dispatch — функция отправки действий в Redux-стор
   const dispatch = useDispatch();
+  // useSelector подписывает компонент на часть стора (state.cars);
+  // при изменении этих данных компонент автоматически перерисуется
   const { list: cars, loading, error } = useSelector((state) => state.cars);
 
   const [showForm, setShowForm] = useState(false);
@@ -47,6 +64,8 @@ export function CarList({ previewCount, hideControls = false }) {
     }));
   };
 
+  // При первом отображении компонента запускаем загрузку списка авто.
+  // dispatch(loadCars()) → thunk → API → extraReducers → стор → ре-рендер
   useEffect(() => {
     dispatch(loadCars());
   }, [dispatch]);

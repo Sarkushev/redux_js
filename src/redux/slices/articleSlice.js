@@ -1,6 +1,18 @@
+/**
+ * articleSlice.js - Redux слайс для управления статьями
+ *
+ * Хранит список статей, выбранную статью и состояния загрузки/ошибки.
+ * Реализует социальные функции: лайки, избранное, рейтинги (синхронно).
+ *
+ * Асинхронные действия (thunks): loadArticles, loadArticleById
+ * Синхронные действия: clearSelectedArticle, toggleLike, toggleFavorite, addRating
+ */
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchArticles, fetchArticleById } from '../../api/api';
 
+// === АСИНХРОННЫЕ ДЕЙСТВИЯ (Thunks) ===
+// Загружают статьи из api/api.js. Под каждый создаются экшены pending/fulfilled/rejected
 export const loadArticles = createAsyncThunk(
   'articles/loadArticles',
   async () => {
@@ -17,12 +29,15 @@ export const loadArticleById = createAsyncThunk(
 
 const articleSlice = createSlice({
   name: 'articles',
+  // Начальное состояние
   initialState: {
-    list: [],
-    selectedArticle: null,
-    loading: false,
-    error: null,
+    list: [],               // все статьи
+    selectedArticle: null,  // открытая статья
+    loading: false,         // флаг загрузки
+    error: null,            // ошибка
   },
+  // === СИНХРОННЫЕ РЕДЬЮСЕРЫ (лайки, избранное, рейтинг) ===
+  // Работают локально с уже загруженным состоянием, без запроса к серверу
   reducers: {
     clearSelectedArticle: (state) => {
       state.selectedArticle = null;
@@ -66,6 +81,8 @@ const articleSlice = createSlice({
       }
     },
   },
+  // === АСИНХРОННЫЕ РЕДЬЮСЕРЫ ===
+  // Реагируют на 3 фазы каждого thunk и обновляют состояние
   extraReducers: (builder) => {
     builder
       // Загрузка списка статей
